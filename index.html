@@ -20,7 +20,7 @@
       width: 200px;
       height: 150px;
       cursor: pointer;
-      transition: transform 2s ease, opacity 2s ease; /* transition 속성 추가 */
+      transition: opacity 2s ease; /* transition 속성 추가 */
     }
 
     .balloon {
@@ -54,6 +54,12 @@
   <img id="target" src="image4.jpg" alt="Touch Me">
   <div class="balloon" id="success-balloon">터치 성공!</div>
   <div class="balloon" id="warning-balloon">건들지마!</div>
+  <div class="balloon" id="ouch-balloon">윽..으윽..</div>
+  <div class="balloon" id="stop-balloon">그만..!!</div>
+  <div class="balloon" id="oh-no-balloon">어허!</div>
+  <div class="balloon" id="random-balloon1">감히 이 몸을 건드리다니...</div>
+  <div class="balloon" id="random-balloon2">일진들아 기다려라!!</div>
+  <div class="balloon" id="random-balloon3">하나도 안아파!!</div>
 </div>
 
 <script>
@@ -61,74 +67,93 @@
   const target = document.getElementById('target');
   const successBalloon = document.getElementById('success-balloon');
   const warningBalloon = document.getElementById('warning-balloon');
+  const ouchBalloon = document.getElementById('ouch-balloon');
+  const stopBalloon = document.getElementById('stop-balloon');
+  const ohNoBalloon = document.getElementById('oh-no-balloon');
+  const randomBalloon1 = document.getElementById('random-balloon1');
+  const randomBalloon2 = document.getElementById('random-balloon2');
+  const randomBalloon3 = document.getElementById('random-balloon3');
   const touchCounter = document.getElementById('touch-counter');
 
   let touchCount = 0;
 
-  function showSuccessBalloon(x, y) {
-    successBalloon.style.left = `${x}px`;
-    successBalloon.style.top = `${y - 30}px`; // 말풍선이 이미지 위로 올라가도록 조정
-    successBalloon.style.display = 'block';
+  function showSuccessBalloon(x, y, balloon) {
+    balloon.style.left = `${x}px`;
+    balloon.style.top = `${y - 30}px`; // 말풍선이 이미지 위로 올라가도록 조정
+    balloon.style.display = 'block';
 
     setTimeout(() => {
-      successBalloon.style.display = 'none';
-    }, 1000); // 1초 후 말풍선 숨김
+      balloon.style.display = 'none';
+    }, 2000); // 2초 후 말풍선 숨김
+  }
+
+  function showRandomBalloon(x, y) {
+    const balloons = [randomBalloon1, randomBalloon2, randomBalloon3];
+    const randomIndex = Math.floor(Math.random() * balloons.length);
+    const balloonToShow = balloons[randomIndex];
+
+    balloonToShow.style.left = `${x}px`;
+    balloonToShow.style.top = `${y - 30}px`; // 말풍선이 이미지 위로 올라가도록 조정
+    balloonToShow.style.display = 'block';
+
+    setTimeout(() => {
+      balloonToShow.style.display = 'none';
+    }, 2000); // 2초 후 말풍선 숨김
   }
 
   function handleTouch(event) {
     const x = event.clientX - gameContainer.getBoundingClientRect().left;
     const y = event.clientY - gameContainer.getBoundingClientRect().top;
 
-    showSuccessBalloon(x, y);
+    showSuccessBalloon(x, y, successBalloon);
     
     // 터치 횟수 증가 및 업데이트
     touchCount++;
     touchCounter.textContent = `터치된 횟수: ${touchCount}`;
 
-    // 10번 클릭되면 이미지 변경 및 '건들지마!' 말풍선 표시
-    if (touchCount === 10) {
-      // 서서히 투명해지도록 설정
-      target.style.opacity = 0;
-
-      // '건들지마!' 말풍선 표시
-      warningBalloon.style.display = 'block';
-
-      setTimeout(() => {
-        target.src = "image3.jpg"; // 새로운 이미지 경로로 변경
-        target.alt = "New Touch Me"; // 이미지 alt 속성 업데이트
-        target.style.opacity = 1; // 서서히 나타나도록 설정
-        warningBalloon.style.display = 'none';
-        // 클릭 가능하도록 설정
-        target.addEventListener('click', handleTouch);
-      }, 2000); // 2초 후 말풍선 숨김
+    // 7번 클릭되면 '으윽...으으윽...' 말풍선 표시
+    if (touchCount % 7 === 0) {
+      // '으윽...으으윽...' 말풍선 표시
+      showSuccessBalloon(x, y, ouchBalloon);
     }
 
-    // 30번 클릭되면 이미지 변경
+    // 30번 클릭되면 '그만..!!' 말풍선 표시
     if (touchCount === 30) {
       // 서서히 투명해지도록 설정
       target.style.opacity = 0;
       
+      // '그만..!!' 말풍선 표시
+      showSuccessBalloon(x, y, stopBalloon);
+
       setTimeout(() => {
-        target.src = "image5.jpg";
-        target.alt = "Image 5";
+        target.src = "image5.jpg"; // 새로운 이미지 경로로 변경
+        target.alt = "Image 5"; // 이미지 alt 속성 업데이트
         target.style.opacity = 1; // 서서히 나타나도록 설정
         // 클릭 가능하도록 설정
         target.addEventListener('click', handleTouch);
       }, 2000); // 2초 후 말풍선 숨김
     }
 
-    // 60번 클릭되면 이미지 변경
+    // 60번 클릭되면 '어허!' 말풍선 표시
     if (touchCount === 60) {
       // 서서히 투명해지도록 설정
       target.style.opacity = 0;
       
+      // '어허!' 말풍선 표시
+      showSuccessBalloon(x, y, ohNoBalloon);
+
       setTimeout(() => {
-        target.src = "image6.jpg";
-        target.alt = "Image 6";
+        target.src = "image6.jpg"; // 새로운 이미지 경로로 변경
+        target.alt = "Image 6"; // 이미지 alt 속성 업데이트
         target.style.opacity = 1; // 서서히 나타나도록 설정
         // 클릭 가능하도록 설정
         target.addEventListener('click', handleTouch);
       }, 2000); // 2초 후 말풍선 숨김
+    }
+
+    // Every 5 seconds, show a random balloon
+    if (touchCount % 10 === 0) { // Assuming every 5 seconds with a click rate of 2 clicks per second
+      showRandomBalloon(x, y);
     }
   }
 
