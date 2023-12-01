@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #game-container {
+      position: relative;
+    }
+
+    #target {
+      width: 200px;
+      height: 150px;
+      cursor: pointer;
+      transition: transform 2s ease, opacity 2s ease; /* transition 속성 추가 */
+    }
+
+    .balloon {
+      position: absolute;
+      background-color: white; /* 흰색 배경으로 변경 */
+      color: #333; /* 글자색 변경 */
+      padding: 10px;
+      border: 2px solid #333; /* 테두리 추가 */
+      border-radius: 5px;
+      display: none;
+      z-index: 2; /* 말풍선이 위로 올라오도록 설정 */
+      white-space: nowrap; /* 줄 바꿈 방지 */
+      pointer-events: none; /* 말풍선 클릭 방지 */
+    }
+
+    #touch-counter {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #333;
+      font-weight: bold;
+      z-index: 3; /* 항상 가장 위에 있도록 설정 */
+    }
+  </style>
+  <title>터치 게임</title>
+</head>
+<body>
+
+<div id="game-container">
+  <div id="touch-counter">터치된 횟수: 0</div>
+  <img id="target" src="image4.jpg" alt="Touch Me">
+  <div class="balloon" id="success-balloon">터치 성공!</div>
+  <div class="balloon" id="warning-balloon">건들지마!</div>
+</div>
+
+<script>
+  const gameContainer = document.getElementById('game-container');
+  const target = document.getElementById('target');
+  const successBalloon = document.getElementById('success-balloon');
+  const warningBalloon = document.getElementById('warning-balloon');
+  const touchCounter = document.getElementById('touch-counter');
+
+  let touchCount = 0;
+
+  function showSuccessBalloon(x, y) {
+    successBalloon.style.left = `${x}px`;
+    successBalloon.style.top = `${y - 30}px`; // 말풍선이 이미지 위로 올라가도록 조정
+    successBalloon.style.display = 'block';
+
+    setTimeout(() => {
+      successBalloon.style.display = 'none';
+    }, 1000); // 1초 후 말풍선 숨김
+  }
+
+  function handleTouch(event) {
+    const x = event.clientX - gameContainer.getBoundingClientRect().left;
+    const y = event.clientY - gameContainer.getBoundingClientRect().top;
+
+    showSuccessBalloon(x, y);
+    
+    // 터치 횟수 증가 및 업데이트
+    touchCount++;
+    touchCounter.textContent = `터치된 횟수: ${touchCount}`;
+
+    // 10번 클릭되면 이미지 변경 및 '건들지마!' 말풍선 표시
+    if (touchCount === 10) {
+      // 서서히 투명해지도록 설정
+      target.style.opacity = 0;
+
+      // '건들지마!' 말풍선 표시
+      warningBalloon.style.display = 'block';
+
+      setTimeout(() => {
+        target.src = "image3.jpg"; // 새로운 이미지 경로로 변경
+        target.alt = "New Touch Me"; // 이미지 alt 속성 업데이트
+        target.style.opacity = 1; // 서서히 나타나도록 설정
+        warningBalloon.style.display = 'none';
+        // 클릭 가능하도록 설정
+        target.addEventListener('click', handleTouch);
+      }, 2000); // 2초 후 말풍선 숨김
+    }
+
+    // 30번 클릭되면 이미지 변경
+    if (touchCount === 30) {
+      // 서서히 투명해지도록 설정
+      target.style.opacity = 0;
+      
+      setTimeout(() => {
+        target.src = "image5.jpg";
+        target.alt = "Image 5";
+        target.style.opacity = 1; // 서서히 나타나도록 설정
+        // 클릭 가능하도록 설정
+        target.addEventListener('click', handleTouch);
+      }, 2000); // 2초 후 말풍선 숨김
+    }
+
+    // 60번 클릭되면 이미지 변경
+    if (touchCount === 60) {
+      // 서서히 투명해지도록 설정
+      target.style.opacity = 0;
+      
+      setTimeout(() => {
+        target.src = "image6.jpg";
+        target.alt = "Image 6";
+        target.style.opacity = 1; // 서서히 나타나도록 설정
+        // 클릭 가능하도록 설정
+        target.addEventListener('click', handleTouch);
+      }, 2000); // 2초 후 말풍선 숨김
+    }
+  }
+
+  target.addEventListener('click', handleTouch);
+</script>
+
+</body>
+</html>
